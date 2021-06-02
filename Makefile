@@ -34,7 +34,7 @@ git-commit:
 	git checkout
 	git add *.cc *.h Makefile >> .local.git.out  || echo
 	git commit -a -m 'Commit' >> .local.git.out || echo
-	git push origin master 
+	git push origin main
 
 .PHONY: clean
 clean:
