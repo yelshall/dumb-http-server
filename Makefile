@@ -13,14 +13,8 @@ util.o: util.c
 jj-mod.so: jj-mod.o util.o
 	ld -G -o jj-mod.so jj-mod.o util.o -fPIC
 
-daytime-server : daytime-server.o
-	$(CXX) -o $@ $@.o $(NETLIBS)
-
 myhttpd : myhttpd.o
 	$(CXX) -o $@ $@.o $(NETLIBS) -lpthread -ldl
-
-use-dlopen: use-dlopen.o
-	$(CXX) -o $@ $@.o $(NETLIBS) -ldl
 
 hello.so: hello.o
 	ld -G -o hello.so hello.o
