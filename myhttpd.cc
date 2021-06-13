@@ -41,7 +41,7 @@ typedef void (*httprunfunc) (int ssock, const char *querystring);
 pthread_mutex_t mutex;
 
 const char *usage = "\nmyhttpd [-f|-t|-p] [<port>]\n";
-const char *realm = "The_Great_Realm_Of_CS252";
+const char *realm = "Cool Server";
 const char *auth = "eWVsc2hhbGw6aW15b3RhMDI=";
 const int maxDocRequest = 1024;
 int mode = -1;
@@ -248,7 +248,7 @@ void processHTTPRequest(int fd) {
   noRequests++;
   pthread_mutex_unlock(&mutex);
 
-  char *response_string = "HTTP/1.1 400 Bad Request\r\nServer: CS 252 lab5";
+  char *response_string = "HTTP/1.1 400 Bad Request\r\nServer: My Server";
   char doc[maxDocRequest];
   char otherInfo[maxDocRequest];
   int docLength = 0;
@@ -505,7 +505,7 @@ void processHTTPRequest(int fd) {
     }
 
     if(strstr(doc, "/u/") != NULL && strlen(doc) < rootDir.length()) {
-      response_string = "HTTP/1.1 403 Forbidden\r\nServer: CS 252 lab5";
+      response_string = "HTTP/1.1 403 Forbidden\r\nServer: My Server";
       forbidden(fd, response_string);
       if(mode == 1 || mode == 2) {
         close(fd);
@@ -549,7 +549,7 @@ void processHTTPRequest(int fd) {
       fullPath += doc;
       writeLog((char *) strdup(fullPath.c_str()));
 
-      response_string =  "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\n";
+      response_string =  "HTTP/1.1 200 Document follows\r\nServer: My Server\r\n";
       int ret = fork();
       if(ret == 0) {
         cgiBin(fd, response_string, fullPath);
@@ -577,7 +577,7 @@ void processHTTPRequest(int fd) {
       fullPath += doc;
       writeLog((char *) strdup(fullPath.c_str()));
 
-      response_string = "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\nContent-type: ";
+      response_string = "HTTP/1.1 200 Document follows\r\nServer: My Server\r\nContent-type: ";
 
       write(fd, response_string, strlen(response_string));
       write(fd, "text/html", strlen("text/html"));
@@ -607,7 +607,7 @@ void processHTTPRequest(int fd) {
       fullPath += doc;
       writeLog((char *) strdup(fullPath.c_str()));
 
-      response_string = "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\nContent-type: ";
+      response_string = "HTTP/1.1 200 Document follows\r\nServer: My Server\r\nContent-type: ";
 
       write(fd, response_string, strlen(response_string));
       write(fd, "text/html", strlen("text/html"));
@@ -669,7 +669,7 @@ void processHTTPRequest(int fd) {
   }
 
   if(fullPath.length() < rootDir.length()) {
-    response_string = "HTTP/1.1 403 Forbidden\r\nServer: CS 252 lab5";
+    response_string = "HTTP/1.1 403 Forbidden\r\nServer: My Server";
     forbidden(fd, response_string);
 
     if(mode == 1 || mode == 2) {
@@ -705,7 +705,7 @@ void processHTTPRequest(int fd) {
     DIR *dir = opendir(fullPath.c_str());
 
     if(dir != NULL) {
-      response_string = "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\nContent-type: ";
+      response_string = "HTTP/1.1 200 Document follows\r\nServer: My Server\r\nContent-type: ";
 
       write(fd, response_string, strlen(response_string));
       write(fd, "text/html", strlen("text/html"));
@@ -739,7 +739,7 @@ void processHTTPRequest(int fd) {
 
   if(dir != NULL) {
     sortMode = 0;
-    response_string = "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\nContent-type: ";
+    response_string = "HTTP/1.1 200 Document follows\r\nServer: My Server\r\nContent-type: ";
 
     write(fd, response_string, strlen(response_string));
     write(fd, "text/html\r\n", strlen("text/html\r\n"));
@@ -776,10 +776,10 @@ void processHTTPRequest(int fd) {
   FILE *f = fopen(fullPath.c_str(), "r");
 
   if(f == NULL) {
-    response_string = "HTTP/1.1 404 File Not Found\r\nServer: CS 252 lab5\r\nContent-type: ";
+    response_string = "HTTP/1.1 404 File Not Found\r\nServer: My Server\r\nContent-type: ";
     fileNotFound(fd, type, response_string);
   } else {
-    response_string = "HTTP/1.1 200 Document follows\r\nServer: CS 252 lab5\r\nContent-type: ";
+    response_string = "HTTP/1.1 200 Document follows\r\nServer: My Server\r\nContent-type: ";
 
     write(fd, response_string, strlen(response_string));
     write(fd, type, strlen(type));
@@ -881,7 +881,7 @@ void cgiBin(int fd, char *response_string, std::string fullPath) {
   char *query = strrchr(full, '?');
 
   if(query == NULL) {
-    response_string = "HTTP/1.1 400 Bad Request\r\nServer: CS 252 lab5";
+    response_string = "HTTP/1.1 400 Bad Request\r\nServer: My Server";
     badRequest(fd, response_string);
     if(mode == 1 || mode == 2) {
       close(fd);
@@ -984,7 +984,7 @@ void sendDir(int fd, DIR *dir, char *path) {
   write(fd, "<tr>", 4);
 
   write(fd, "<th valign=\"top\">", 17);
-  write(fd, "<img src=\"/u/riker/u93/yelshall/cs252/lab5-src/http-root-dir/dirIcons/blank.gif\" alt=\"[ICO]\">", 92);
+  write(fd, "<img src=\"./http-root-dir/dirIcons/blank.gif\" alt=\"[ICO]\">", 92);
   write(fd, "</th>", 5);
 
   write(fd, "<th>", 4);
@@ -1031,7 +1031,7 @@ void sendDir(int fd, DIR *dir, char *path) {
 
   write(fd, "<tr><th colspan=\"5\"><hr></th></tr>", 34);
 
-  write(fd, "<tr><td valign=\"top\"><img src=\"/u/riker/u93/yelshall/cs252/lab5-src/http-root-dir/dirIcons/back.gif\" alt=\"[PARENTDIR]\"></td><td><a href=", 136);
+  write(fd, "<tr><td valign=\"top\"><img src=\"./http-root-dir/dirIcons/back.gif\" alt=\"[PARENTDIR]\"></td><td><a href=", 136);
   char *temp = strrchr(path, '/');
   char temp2[maxDocRequest];
   char temp3[maxDocRequest];
@@ -1098,7 +1098,7 @@ void sendDir(int fd, DIR *dir, char *path) {
   }
 
   for(int i = 0; i < x; i++) {
-    write(fd, "<tr><td valign=\"top\"><img src=\"/u/riker/u93/yelshall/cs252/lab5-src/http-root-dir/dirIcons/", 91);
+    write(fd, "<tr><td valign=\"top\"><img src=\"./http-root-dir/dirIcons/", 91);
     if(files[i]->dir) {
       write(fd, "folder.gif", 10);
     } else if(strcmp(endsWith(files[i]->path), "error") == 0) {
@@ -1230,8 +1230,8 @@ void logsPage(int fd) {
 
   fscanf(f, "\n");
 
-  while(fscanf(f, "Source: data.cs.purdue.edu:%d, Directory Requested: %s\n", &p, d) == 2) {
-    sprintf(response, "Source: data.cs.purdue.edu:%d, Directory Requested: %s", p, d);
+  while(fscanf(f, "Source: localhost:%d, Directory Requested: %s\n", &p, d) == 2) {
+    sprintf(response, "Source: localhost:%d, Directory Requested: %s", p, d);
     write(fd, "<tr>", 4);
     write(fd, "<td>", 4);
     write(fd, "<h3>", 4);
@@ -1269,7 +1269,7 @@ char *timeFormatted(int seconds) {
 void writeLog(char *log) {
   FILE *f = fopen("./http-root-dir/log/logFile.txt", "a+");
 
-  fprintf(f, "Source: data.cs.purdue.edu:%d, Directory Requested: %s\n", port, log);
+  fprintf(f, "Source: localhost:%d, Directory Requested: %s\n", port, log);
 
   free(log);
   log = NULL;
